@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Batch" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="Batch" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Contract">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ContractCode" type="xs:string" minOccurs="0" />
+              <xs:element name="ContractData" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="PhaseOfContract" type="xs:string" minOccurs="0" />
+                    <xs:element name="DateOfLastPayment" type="xs:string" minOccurs="0" />
+                    <xs:element name="NextPaymentDate" type="xs:string" minOccurs="0" />
+                    <xs:element name="DateAccountOpened" type="xs:string" minOccurs="0" />
+                    <xs:element name="RealEndDate" type="xs:string" minOccurs="0" />
+                    <xs:element name="OriginalAmount" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Value" type="xs:string" minOccurs="0" />
+                          <xs:element name="Currency" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="InstallmentAmount" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Value" type="xs:string" minOccurs="0" />
+                          <xs:element name="Currency" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="CurrentBalance" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Value" type="xs:string" minOccurs="0" />
+                          <xs:element name="Currency" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="OverdueBalance" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Value" type="xs:string" minOccurs="0" />
+                          <xs:element name="Currency" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Individual" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="CustomerCode" type="xs:string" minOccurs="0" />
+                    <xs:element name="FirstName" type="xs:string" minOccurs="0" />
+                    <xs:element name="LastName" type="xs:string" minOccurs="0" />
+                    <xs:element name="Gender" type="xs:string" minOccurs="0" />
+                    <xs:element name="DateOfBirth" type="xs:string" minOccurs="0" />
+                    <xs:element name="IdentificationNumbers" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SubjectRole" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="CustomerCode" type="xs:string" minOccurs="0" />
+                    <xs:element name="RoleOfCustomer" type="xs:string" minOccurs="0" />
+                    <xs:element name="GuaranteeAmount" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
