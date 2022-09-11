@@ -12,7 +12,8 @@ namespace CreditInfo.Domain.Validations
     {
         public IndividualValidator()
         {
-            RuleFor(x => x.DateOfBirth).NotEmpty().Must(x => (DateTime.Now.Year - x.Year) > 18 && (DateTime.Now.Year - x.Year) < 99);
+            RuleFor(x => x.Age).NotEmpty().Must(x => x >= 18 && x <= 99)
+                .WithMessage("Individual.DateOfBirth attribute value must be between 18 and 99 years"); ;
         }
     }
 }

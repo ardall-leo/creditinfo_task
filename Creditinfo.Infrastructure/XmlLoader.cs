@@ -4,7 +4,9 @@ using CreditInfo.Domain.Validations;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -15,15 +17,13 @@ namespace Creditinfo.Infrastructure
 {
     public class XmlLoader : IDataLoader
     {
-
         public Task Load(string fileName, string xsdLocation, string ns)
         {
-
             var streamQuery =
-              from c in StreamElements(fileName, xsdLocation, ns, "Contract")
+              from c in StreamElements(fileName, xsdLocation, ns, "Contract", null)
               select c;
 
-            XmlSerializer ser = new XmlSerializer(typeof(Contract));
+            XmlSerializer ser = new XmlSerializer(typeof(Contract), ns);
 
             List<Contract> contracts = new();
             List<string> invalidContractsCode = new();
@@ -32,13 +32,19 @@ namespace Creditinfo.Infrastructure
             {
                 try
                 {
-                    var contract = (Contract)ser.Deserialize(i.CreateReader());
+                    Contract obj = (Contract)ser.Deserialize(i.CreateReader());
                     var contractValidator = new ContractValidator { RuleLevelCascadeMode = CascadeMode.Stop };
-                    var result = contractValidator.Validate(contract);
+                    var result = contractValidator.Validate(obj);
 
-                    if (result.IsValid)
+                    if (obj.IsValid && result.IsValid)
                     {
-                        contracts.Add(contract);
+                        contracts.Add(obj);
+                    }
+                    else
+                    {
+                        Console.WriteLine(obj.ContractCode);
+
+                        invalidContractsCode.Add(obj.ContractCode);
                     }
                 }
                 catch (Exception ex)
@@ -49,8 +55,7 @@ namespace Creditinfo.Infrastructure
 
             return Task.CompletedTask;
         }
-
-        private IEnumerable<XElement> StreamElements(string fileName, string xsdLocation, string ns, string elementName)
+        public IEnumerable<XElement> StreamElements(string fileName, string xsdLocation, string ns, string elementName, Stream s)
         {
 
             XmlSchemaSet xmlSchema = new XmlSchemaSet();
@@ -58,11 +63,14 @@ namespace Creditinfo.Infrastructure
             var settings = new XmlReaderSettings
             {
                 Schemas = xmlSchema,
+                IgnoreWhitespace = false,
                 ConformanceLevel = ConformanceLevel.Document,
                 ValidationType = ValidationType.Schema,
-                ValidationFlags = XmlSchemaValidationFlags.ProcessSchemaLocation |
-                     XmlSchemaValidationFlags.ProcessInlineSchema,
+                ValidationFlags = XmlSchemaValidationFlags.ProcessSchemaLocation | XmlSchemaValidationFlags.ProcessInlineSchema,
             };
+
+            bool isContractValid = true;
+            Stack<string> validationErrors = new Stack<string>();
 
             settings.ValidationEventHandler += (obj, ea) => {
                 if (ea.Severity == XmlSeverityType.Warning)
@@ -72,21 +80,37 @@ namespace Creditinfo.Infrastructure
                 else
                 {
                     Console.WriteLine(ea.Message);
+                    isContractValid = false;
+
+                    // TODO: raise event and associate the xsdValidation status
                 }
             };
 
             using (var rdr = XmlReader.Create(fileName, settings))
             {
-                rdr.MoveToContent();
-                while (rdr.Read())
+                while (!rdr.EOF)
                 {
-                    if ((rdr.NodeType == XmlNodeType.Element) && (rdr.Name == elementName))
+                    if (rdr.Name != elementName)
                     {
-                        var e = XElement.ReadFrom(rdr) as XElement;
+                        rdr.ReadToFollowing(elementName);
+                    }
 
-                        yield return e;
+                    if (!rdr.EOF && rdr.IsStartElement())
+                    {
+                        var o = XElement.ReadFrom(rdr) as XElement;
+
+                      // XmlSerializer ser = new XmlSerializer(typeof(Contract), ns);
+                        //Contract obj = (Contract)ser.Deserialize(rdr);
+                        //obj.IsValid = isContractValid;
+                        //obj.XsdValidationErrors = validationErrors.ToList();
+
+                        // reset
+                        isContractValid = true;
+
+                        yield return o;
                     }
                 }
+
                 rdr.Close();
             }
         }

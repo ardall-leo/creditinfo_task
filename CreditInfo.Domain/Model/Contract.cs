@@ -1,29 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace CreditInfo.Domain.Model
 {
+    [Serializable]
     [XmlRoot(Namespace = "http://creditinfo.com/schemas/Sample/Data", ElementName = "Batch")]
     public class Batch
     {
-        [XmlElement]
+        [XmlArray]
         public List<Contract> Contract { get; set; }
     }
+
+    [Serializable]
     [XmlRoot(Namespace = "http://creditinfo.com/schemas/Sample/Data", ElementName = "Contract")]
+    [XmlType(AnonymousType = true, Namespace = "http://creditinfo.com/schemas/Sample/Data")]
     public class Contract
     {
-        [XmlElement]
+        public bool IsValid { get; set; }
+
+        [XmlElement("ContractCode")]
         public string ContractCode { get; set; }
-        [XmlElement]
+
+        [XmlElement("ContractData")]
         public ContractData ContractData { get; set; }
-        [XmlElement]
-        public Individual Individual { get; set; }
-        [XmlElement]
-        public SubjectRole SubjectRole { get; set; }
+
+        [XmlElement("Individual")]
+        public List<Individual> Individual { get; set; }
+
+        [XmlElement("SubjectRole")]
+        public List<SubjectRole> SubjectRole { get; set; }
 
     }
 }

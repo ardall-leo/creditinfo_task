@@ -15,11 +15,8 @@ namespace CreditInfo
     {
         static void Main(string[] args)
         {
-            XNamespace aw = "http://creditinfo.com/schemas/Sample/Data";
             var x = new XmlLoader();
-            x.Load(@"C:\creditinfo\data.xml", @"C:\creditinfo\structure.xsd", "http://creditinfo.com/schemas/Sample/Data");
+            x.Load("data.xml", "structure.xsd", "http://creditinfo.com/schemas/Sample/Data");
         }
-
-        
     }
 }

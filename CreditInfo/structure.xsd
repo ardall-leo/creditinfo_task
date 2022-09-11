@@ -31,7 +31,7 @@
                               </xs:restriction>
                             </xs:simpleType>
                           </xs:element>
-                          <xs:element name="Currency" />
+                          <xs:element type="CI.CBS.Contracts.Public.Structures.Enums.Common.Currency" name="Currency" />
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
@@ -45,7 +45,7 @@
                               </xs:restriction>
                             </xs:simpleType>
                           </xs:element>
-                          <xs:element name="Currency" />
+                          <xs:element type="CI.CBS.Contracts.Public.Structures.Enums.Common.Currency" name="Currency" />
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
@@ -59,7 +59,7 @@
                               </xs:restriction>
                             </xs:simpleType>
                           </xs:element>
-                          <xs:element name="Currency" />
+                          <xs:element type="CI.CBS.Contracts.Public.Structures.Enums.Common.Currency" name="Currency" />
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
@@ -73,7 +73,7 @@
                               </xs:restriction>
                             </xs:simpleType>
                           </xs:element>
-                          <xs:element name="Currency" />
+                          <xs:element type="CI.CBS.Contracts.Public.Structures.Enums.Common.Currency" name="Currency" />
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
@@ -150,7 +150,7 @@
                               </xs:restriction>
                             </xs:simpleType>
                           </xs:element>
-                          <xs:element name="Currency" />
+                          <xs:element type="CI.CBS.Contracts.Public.Structures.Enums.Common.Currency" name="Currency" />
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>

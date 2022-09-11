@@ -10,4 +10,13 @@
     <ProjectReference Include="..\Creditinfo.Infrastructure\Creditinfo.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="data.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="structure.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
