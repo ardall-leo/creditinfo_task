@@ -18,6 +18,7 @@ namespace CreditInfo.Domain.Model
     [XmlType(AnonymousType = true, Namespace = "http://creditinfo.com/schemas/Sample/Data")]
     public class Contract
     {
+        [XmlAttribute]
         public bool IsValid { get; set; }
 
         [XmlElement("ContractCode")]
@@ -32,5 +33,8 @@ namespace CreditInfo.Domain.Model
         [XmlElement("SubjectRole")]
         public List<SubjectRole> SubjectRole { get; set; }
 
+        [XmlArray("XsdErrorMessage")]
+        [XmlArrayItem("Message", Type = typeof(string))]
+        public List<string> XsdErrorMessage { get; set; }
     }
 }

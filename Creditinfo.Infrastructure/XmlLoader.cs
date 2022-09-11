@@ -42,14 +42,14 @@ namespace Creditinfo.Infrastructure
                     }
                     else
                     {
-                        Console.WriteLine(obj.ContractCode);
+                        Console.WriteLine($"Contract code: {obj.ContractCode} have {obj.XsdErrorMessage.Count} error(s) in XSD Validation and {result.Errors.Count} errors(s) in extended validation" );
 
                         invalidContractsCode.Add(obj.ContractCode);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine($"Uncaught validation. {ex.Message}");
                 }
             }
 
@@ -79,10 +79,8 @@ namespace Creditinfo.Infrastructure
                 }
                 else
                 {
-                    Console.WriteLine(ea.Message);
                     isContractValid = false;
-
-                    // TODO: raise event and associate the xsdValidation status
+                    validationErrors.Push(ea.Message);
                 }
             };
 
@@ -98,14 +96,20 @@ namespace Creditinfo.Infrastructure
                     if (!rdr.EOF && rdr.IsStartElement())
                     {
                         var o = XElement.ReadFrom(rdr) as XElement;
-
-                      // XmlSerializer ser = new XmlSerializer(typeof(Contract), ns);
-                        //Contract obj = (Contract)ser.Deserialize(rdr);
-                        //obj.IsValid = isContractValid;
-                        //obj.XsdValidationErrors = validationErrors.ToList();
+                        var xelement = new XElement("XsdErrorMessage", from c in validationErrors
+                                                                       select new XElement("Message", c));
+                        // add XSD validation information to XML
+                        o.SetAttributeValue("IsValid", isContractValid);
+                        o.Add(xelement);
 
                         // reset
                         isContractValid = true;
+                        validationErrors.Clear();
+
+                        foreach (var node in o.Descendants())
+                        {
+                            node.Name = node.Parent.Name.Namespace + node.Name.LocalName;
+                        }
 
                         yield return o;
                     }
